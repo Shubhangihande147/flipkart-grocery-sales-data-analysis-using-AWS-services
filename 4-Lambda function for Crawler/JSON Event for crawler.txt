@@ -1,0 +1,24 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "flipkart-final-clean-bucket"
+        },
+        "object": {
+          "key": "clean-product/product_data.csv"
+        }
+      }
+    },
+    {
+      "s3": {
+        "bucket": {
+          "name": "flipkart-final-clean-bucket"
+        },
+        "object": {
+          "key": "clean-sales/sales_data.csv"
+        }
+      }
+    }
+  ]
+}

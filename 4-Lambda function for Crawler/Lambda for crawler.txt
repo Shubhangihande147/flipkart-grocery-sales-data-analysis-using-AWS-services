@@ -1,0 +1,38 @@
+import json
+import boto3
+
+# Initialize the Glue client
+glue = boto3.client('glue')
+
+def lambda_handler(event, context):
+    # Extract bucket name and object key from the event
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    object_key = event['Records'][0]['s3']['object']['key']
+    
+    # Define the folder prefixes and corresponding crawler names
+    folder_prefix_1 = 'clean-product/'
+    folder_prefix_2 = 'clean-sales/'
+    
+    crawler_name_1 = 'final-product-crawler'
+    crawler_name_2 = 'final-sales-crawler'
+
+    # Start both crawlers asynchronously if their conditions are met
+    crawlers_to_start = []
+    
+    # Check if the object is in the product folder
+    if object_key.startswith(folder_prefix_1):
+        crawlers_to_start.append(crawler_name_1)
+    
+    # Check if the object is in the sales folder
+    if object_key.startswith(folder_prefix_2):
+        crawlers_to_start.append(crawler_name_2)
+
+    # Start the crawlers
+    for crawler_name in crawlers_to_start:
+        glue.start_crawler(Name=crawler_name)
+        print(f"Started Glue crawler: {crawler_name}")
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Crawlers triggered successfully!')
+    }

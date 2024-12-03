@@ -1,0 +1,38 @@
+import json
+import boto3
+
+# Initialize the Glue client
+glue = boto3.client('glue')
+
+def lambda_handler(event, context):
+    # Define the folder prefixes and corresponding Glue job names
+    folder_prefix_1 = 'folder_for_product_flipkart/'
+    folder_prefix_2 = 'folder_for_sales_flipkart/'
+    
+    glueJobName1 = 'glue_job_for_product'
+    glueJobName2 = 'glue_job_for_sales'
+
+    # Initialize a list to store triggered job responses
+    responses = []
+
+    # Loop through each record in the event
+    for record in event['Records']:
+        object_key = record['s3']['object']['key']
+        
+        # Check if the object key matches the product prefix and trigger the corresponding Glue job
+        if object_key.startswith(folder_prefix_1):
+            response = glue.start_job_run(JobName=glueJobName1)
+            responses.append(f"Started Glue job for product: {response}")
+        
+        # Check if the object key matches the sales prefix and trigger the corresponding Glue job
+        if object_key.startswith(folder_prefix_2):
+            response = glue.start_job_run(JobName=glueJobName2)
+            responses.append(f"Started Glue job for sales: {response}")
+    
+    # Log the responses
+    print("\n".join(responses))
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Job(s) triggered successfully!')
+    }

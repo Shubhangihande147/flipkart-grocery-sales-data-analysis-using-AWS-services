@@ -1,0 +1,24 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "ec2-data-from-flipkart"
+        },
+        "object": {
+          "key": "folder_for_product_flipkart/product_data.csv"
+        }
+      }
+    },
+    {
+      "s3": {
+        "bucket": {
+          "name": "ec2-data-from-flipkart"
+        },
+        "object": {
+          "key": "folder_for_sales_flipkart/sales_data.csv"
+        }
+      }
+    }
+  ]
+}
